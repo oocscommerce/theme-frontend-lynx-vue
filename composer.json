@@ -1,0 +1,21 @@
+{
+    "name": "oocscommerce/theme-frontend-lynx-vue",
+    "description": "Lynx Vue theme",
+    "type": "magento2-theme",
+    "version": "1.0.0",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "require": {
+        "php": ">=8.2",
+        "magento/framework": "*",
+        "oocscommerce/module-lynx-theme": "^1.0",
+        "oocscommerce/theme-frontend-lynx-blank": "^1.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ]
+    }
+}

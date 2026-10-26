@@ -1,0 +1,39 @@
+<?php
+/**
+ * Copyright © OOCS Commerce (https://www.oocscommerce.com). All rights reserved.
+ * See LICENSE.txt for license details.
+ */
+
+// No HTML comments below: everything after the closing tag is printed to the page.
+/** @var \OOCS\LynxInertia\Block\Inertia $block */
+
+/** @var \OOCS\LynxInertia\ViewModel\Inertia $viewModel */
+$viewModel = $block->getViewModel();
+
+// Null unless this route is server rendered and the renderer answered; the markup then carries data-page and the mount
+$ssrBody = $block->getSsrBody();
+
+// Subresource integrity on the payment page (`sri` on this block): import map first, then each tag names its own hash
+$importMap = $block->getSriImportMap();
+$chunks = ['vendor-vue.min.js', 'vendor-inertia.min.js', 'components.min.js'];
+$mainUrl = $escaper->escapeUrl($block->getViewFileUrl('js/lynx/main.min.js'));
+$mainIntegrity = $block->getIntegrityAttributes('main.min.js');
+?>
+<?php if ($importMap !== ''): ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'importmap'], $importMap, false) ?>
+<?php endif; ?>
+
+<?php foreach ($chunks as $chunk): ?>
+    <?php
+    $url = $escaper->escapeUrl($block->getViewFileUrl('js/lynx/' . $chunk));
+    $integrity = $block->getIntegrityAttributes($chunk);
+    ?>
+    <link rel="modulepreload" href="<?= /* @noEscape */ $url ?>"<?= /* @noEscape */ $integrity ?>>
+<?php endforeach; ?>
+<script type="module" src="<?= /* @noEscape */ $mainUrl ?>"<?= /* @noEscape */ $mainIntegrity ?>></script>
+<?php if ($ssrBody !== null): ?>
+    <?= /* @noEscape */ $ssrBody ?>
+<?php else: ?>
+<script type="application/json" data-page="lynx"><?= /* @noEscape */ $viewModel->getJson() ?></script>
+<div id="lynx"></div>
+<?php endif; ?>

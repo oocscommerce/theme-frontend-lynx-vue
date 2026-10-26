@@ -1,0 +1,9 @@
+node_modules/
+.lynx/
+package-lock.json
+/dist/
+.wrangler/
+.env
+.env.local
+.env.*.local
+tsconfig.modules.json

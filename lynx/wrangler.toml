@@ -1,0 +1,14 @@
+# Cloudflare Worker for Lynx server-side rendering. Build first:
+#   npm run build:ssr:worker      → dist/ssr/worker/worker.mjs
+# then, once, `npx wrangler login`, and
+#   npm run deploy:ssr:worker
+# Point Renderer URL at https://<name>.<account>.workers.dev (no /render: Magento appends it).
+name = "lynx-ssr"
+main = "dist/ssr/worker/worker.mjs"
+compatibility_date = "2026-09-01"
+
+# No usage telemetry from wrangler.
+send_metrics = false
+
+# A render takes more CPU than Workers Free allows per request (10 ms); this
+# needs a Workers Paid plan, which raises the limit to 30 s.
